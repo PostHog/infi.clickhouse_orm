@@ -83,7 +83,7 @@ class Database(object):
     def __init__(self, db_name, db_url='http://localhost:8123/',
                  username=None, password=None, cluster=None,
                  readonly=False, autocreate=True,
-                 timeout=60, verify_ssl_cert=True, log_statements=False):
+                 timeout=60, verify_ssl_cert=True, log_statements=False, *, randomize_replica_paths=False):
         '''
         Initializes a database instance. Unless it's readonly, the database will be
         created on the ClickHouse server if it does not already exist.
@@ -98,6 +98,9 @@ class Database(object):
         - `timeout`: the connection timeout in seconds.
         - `verify_ssl_cert`: whether to verify the server's certificate when connecting via HTTPS.
         - `log_statements`: when True, all database statements are logged.
+        - `randomize_replica_paths`: when True, a random integer is appended to table replica paths.
+          This way replicated tables (such as `MigrationHistoryReplicated`) can be dropped and recreated without causing
+          a conflict in Zookeeper. This shouldn't be used in production though.
         '''
         self.db_name = db_name
         self.db_url = db_url
@@ -109,6 +112,7 @@ class Database(object):
         if username:
             self.request_session.auth = (username, password or '')
         self.log_statements = log_statements
+        self.randomize_replica_paths = randomize_replica_paths
         self.settings = {}
         self.db_exists = False # this is required before running _is_existing_database
         self.db_exists = self._is_existing_database()

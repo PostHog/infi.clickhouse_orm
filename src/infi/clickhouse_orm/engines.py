@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 import logging
+import random
 
 from .utils import comma_join, get_subclass_names
 
@@ -104,7 +105,10 @@ class MergeTree(Engine):
     def _build_sql_params(self, db):
         params = []
         if self.replica_name:
-            params += ["'%s'" % self.replica_table_path, "'%s'" % self.replica_name]
+            final_replica_table_path = self.replica_table_path
+            if db.randomize_replica_paths:
+                final_replica_table_path += f'/{random.randint(0, 100000000)}'
+            params += ["'%s'" % final_replica_table_path, "'%s'" % self.replica_name]
 
         # In ClickHouse 1.1.54310 custom partitioning key was introduced
         # https://clickhouse.tech/docs/en/table_engines/custom_partitioning_key/
