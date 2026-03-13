@@ -1,7 +1,7 @@
 
 SETUP_INFO = dict(
     name = 'infi.clickhouse_orm',
-    version = '2.1.0.post19',
+    version = '2.1.0.post20',
     author = 'James Greenhill',
     author_email = 'fuziontech@gmail.com',
 
@@ -52,4 +52,3 @@ def setup():
 
 if __name__ == '__main__':
     setup()
-
