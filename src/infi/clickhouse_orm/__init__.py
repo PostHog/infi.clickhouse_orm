@@ -1,5 +1,3 @@
-__import__("pkg_resources").declare_namespace(__name__)
-
 from infi.clickhouse_orm.database import *
 from infi.clickhouse_orm.engines import *
 from infi.clickhouse_orm.fields import *
