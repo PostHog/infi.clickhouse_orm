@@ -448,5 +448,17 @@ class Database(object):
         return r.text.strip() != '0'
 
 
+# Backward-compatible re-exports: `MigrationHistory` and its variants have always
+# lived in `.migrations`, but historical callers import them from `.database`
+# (e.g. `from infi.clickhouse_orm.database import MigrationHistory`). Keep both paths
+# working. This import is safe at module level because `.migrations` only imports
+# `.database` lazily inside functions, so there is no circular-import cycle.
+from .migrations import (  # noqa: E402
+    MigrationHistory,
+    MigrationHistoryReplicated,
+    MigrationHistoryDistributed,
+)
+
+
 # Expose only relevant classes in import *
 __all__ = [c.__name__ for c in [Page, DatabaseException, ServerError, Database]]
