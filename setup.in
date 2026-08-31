@@ -23,7 +23,6 @@ SETUP_INFO = dict(
     ],
 
     install_requires = ${project:install_requires},
-    namespace_packages = ${project:namespace_packages},
 
     package_dir = {'': 'src'},
     package_data = {'': ${project:package_data}},
@@ -41,8 +40,8 @@ if SETUP_INFO['url'] is None:
 
 def setup():
     from setuptools import setup as _setup
-    from setuptools import find_packages
-    SETUP_INFO['packages'] = find_packages('src')
+    from setuptools import find_namespace_packages
+    SETUP_INFO['packages'] = find_namespace_packages('src', include=['infi*'])
     _setup(**SETUP_INFO)
 
 if __name__ == '__main__':
